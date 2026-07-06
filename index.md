@@ -56,7 +56,9 @@ For your second milestone, explain what you've worked on since your previous mil
 '''
 
 My Project is the Ball Tracking Robot. I plan to put together a Chassis, an ultrasonic sensor, a camera, and a Raspberry Pi to create a robot that uses color to recognize a red ball and navigate towards it. It'll use the camera and the OpenCV library to detect the ball, and the ultrasonic sensor to get the distance from the ball. 
+
 So far, I've finished building my chassis, and wiring the motors and the ultrasonic sensor. The motors are currently controlled via WASD keys on my computer, and I've also created a simple program to test the Ultrasonic sensor by printing the distance between the sensor and the object closest to it. 
+
 I had some difficulty with my motor driver where the motors wouldn't move despite the power going through the right places(as confirmed by a multimeter), but fixed this by siwtching to a different one. The problem turned out to be that the original motor driver needed 5 volts, when the Raspberry Pi only supplied 3.3. Right now, I'm running into issues with the camera. When I connected it to my computer to check, it wouldn't show up there either, so it's safe to assume that it was an issue with the camera itself. 
 
 My next steps will be to get and attach a new camera, and then use OpenCV to code it to recognize red.
