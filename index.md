@@ -47,15 +47,19 @@ For your second milestone, explain what you've worked on since your previous mil
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/s6c-uwc9rKY?si=y6-t750BN_sJyhXn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For your first milestone, describe what your project is and how you plan to build it. You can include:
+'''HTML 
+<!---For your first milestone, describe what your project is and how you plan to build it. You can include:
 - An explanation about the different components of your project and how they will all integrate together
 - Technical progress you've made so far
 - Challenges you're facing and solving in your future milestones
-- What your plan is to complete your project
+- What your plan is to complete your project-->
+'''
 
 My Project is the Ball Tracking Robot. I plan to put together a Chassis, an ultrasonic sensor, a camera, and a Raspberry Pi to create a robot that uses color to recognize a red ball and navigate towards it. It'll use the camera and the OpenCV library to detect the ball, and the ultrasonic sensor to get the distance from the ball. 
 So far, I've finished building my chassis, and wiring the motors and the ultrasonic sensor. The motors are currently controlled via WASD keys on my computer, and I've also created a simple program to test the Ultrasonic sensor by printing the distance between the sensor and the object closest to it. 
-I had some difficulty with my motor driver, but fixed this by siwtching to a different one. The problem turned out to be that the original motor driver needed 5 volts, when the Raspberry Pi only supplied 3.3. 
+I had some difficulty with my motor driver where the motors wouldn't move despite the power going through the right places(as confirmed by a multimeter), but fixed this by siwtching to a different one. The problem turned out to be that the original motor driver needed 5 volts, when the Raspberry Pi only supplied 3.3. Right now, I'm running into issues with the camera. When I connected it to my computer to check, it wouldn't show up there either, so it's safe to assume that it was an issue with the camera itself. 
+
+My next steps will be to get and attach a new camera, and then use OpenCV to code it to recognize red.
 
 # Schematics 
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
