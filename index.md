@@ -47,13 +47,13 @@ For your second milestone, explain what you've worked on since your previous mil
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/s6c-uwc9rKY?si=y6-t750BN_sJyhXn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-'''HTML 
+```HTML 
 <!---For your first milestone, describe what your project is and how you plan to build it. You can include:
 - An explanation about the different components of your project and how they will all integrate together
 - Technical progress you've made so far
 - Challenges you're facing and solving in your future milestones
 - What your plan is to complete your project-->
-'''
+```
 
 My Project is the Ball Tracking Robot. I plan to put together a Chassis, an ultrasonic sensor, a camera, and a Raspberry Pi to create a robot that uses color to recognize a red ball and navigate towards it. It'll use the camera and the OpenCV library to detect the ball, and the ultrasonic sensor to get the distance from the ball. 
 
