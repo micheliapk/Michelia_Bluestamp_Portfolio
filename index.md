@@ -52,7 +52,10 @@ For your first milestone, describe what your project is and how you plan to buil
 - Technical progress you've made so far
 - Challenges you're facing and solving in your future milestones
 - What your plan is to complete your project
-- 
+
+My Project is the Ball Tracking Robot. I plan to put together a Chassis, an ultrasonic sensor, a camera, and a Raspberry Pi to create a robot that uses color to recognize a red ball and navigate towards it. It'll use the camera and the OpenCV library to detect the ball, and the ultrasonic sensor to get the distance from the ball. 
+So far, I've finished building my chassis, and wiring the motors and the ultrasonic sensor. The motors are currently controlled via WASD keys on my computer, and I've also created a simple program to test the Ultrasonic sensor by printing the distance between the sensor and the object closest to it. 
+I had some difficulty with my motor driver, but fixed this by siwtching to a different one. The problem turned out to be that the original motor driver needed 5 volts, when the Raspberry Pi only supplied 3.3. 
 
 # Schematics 
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
