@@ -36,7 +36,9 @@ For your final milestone, explain the outcome of your project. Key details to in
 <iframe width="560" height="315" src="https://www.youtube.com/embed/y3VAmNlER5Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 For my second milestone, I added a camera and two more ultrasonic sensors to my robot. I used OpenCV to recognize the red coloring of the ball, then set some parameters for the tracking of the ball, such as a "deadzone" which is a section in the middle that the ball should stay in, and a minimum area of the ball to prevent the robot from tracking some other random red thing. Then, I used the ultrasonic sensor to get the distance between the ball and the robot, and to have the robot move till its around or closer than 7 cm to the ball.
+
 I was surprised to learn that with color spaces, HSV(Hue Saturation Value) is better for tracking colored objects than RGB(Red Green Blue). The reason for this is that HSV takes the lighting more into account, since the color is measured seperate from the lighting. 
+
 I faced difficulty with getting the camera to connect to the pi. At first, I tried to connect a camera port, but the Raspberry Pi wouldn't recognize any camera connected to it. Eventually, I tested this with another camera and was able to conclude that the camera port itself was faulty. In this process, I also found out that I was using an old OS which I had thought could've been causing the issue with the camera. It's now updated for to the Trixie OS. Tuning the color bounds for red also took some experimenting.
 Before my final milestone, I'd like to add code for the robot to search for the ball if it goes out of frame via flags.
 
