@@ -33,7 +33,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 **Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
 
-<iframe width="560" height="315" src="[https://www.youtube.com/embed/y3VAmNlER5Y](https://youtu.be/dqM9WtTb2UU?si=JHxGaZzCtH7Smqpm)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="560" height="315" src="(https://youtu.be/dqM9WtTb2UU?si=JHxGaZzCtH7Smqpm)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 For my second milestone, I added a camera and two more ultrasonic sensors to my robot. I used OpenCV to recognize the red coloring of the ball, then set some parameters for the tracking of the ball, such as a "deadzone" which is a section in the middle that the ball should stay in, and a minimum area of the ball to prevent the robot from tracking some other random red thing. Then, I used the ultrasonic sensor to get the distance between the ball and the robot, and to have the robot move till its around or closer than 7 cm to the ball.
 
