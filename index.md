@@ -20,6 +20,10 @@ You should comment out all portions of your portfolio that you have not complete
 **Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
 
 <iframe width="560" height="315" src="https://youtu.be/dqM9WtTb2UU?si=DeQWFoDjMvfLWuGu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+For my final milestone, I added code to make sure the detected object was also round, and code to search in the direction the ball last was when it moves out of frame. 
+My biggest challenges were ..............
+I learned a lot about how OpenCV works, such as about the bounds defining a color, and color masking. I also learned how ultrasonic sensors work, and how to convert that value into centimeters to make it easier to work with. Overall, throughout the project I learned a lot about debugging, especially with wiring, such as the multimeter to check where power may or may not be going through. 
+I'd hope to learn more about.......
 
 For your final milestone, explain the outcome of your project. Key details to include are:
 - What you've accomplished since your previous milestone
