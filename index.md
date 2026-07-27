@@ -1,6 +1,6 @@
 # Ball Tracking Robot
 Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!
-My project
+My project has the robot track a ball, as well as "search" for it when it moves out of sight. This works by using the OpenCV library to recognize the ball by its distinctive red color. Additionally, by drawing a contour outlining the ball, the shape is compared to a circle, to make sure the robot doesn't get distracted by another red object. Initially, I had some difficulty with my wires; For example, my camera didn't connect due to the camera port on the Pi being faulty. Overall, I learned a lot about coding since much of this project relies on OpenCV with the camera to function. 
 
 You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
 ```HTML 
