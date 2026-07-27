@@ -73,18 +73,275 @@ Here's where you'll put images of your schematics. [Tinkercad](https://www.tinke
 
 # Code
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
-
+The finished program:
 ```c++
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("Hello World!");
-}
+import cv2
+from picamera2 import Picamera2
+import time
+import numpy as np
+import RPi.GPIO as GPIO
+import cv2
+import numpy as np
+from gpiozero import PWMOutputDevice
 
-void loop() {
-  // put your main code here, to run repeatedly:
+GPIO.setmode(GPIO.BCM)
+SPEED = 0.4
 
-}
+GPIO_TRIGGER2 = 9     #FRONT ultrasonic sensor
+GPIO_ECHO2 = 1
+#
+
+motor1B = PWMOutputDevice(24, frequency=100) # LEFT Forward
+motor1E = PWMOutputDevice(23, frequency=100) # LEFT Backward
+
+motor2B = PWMOutputDevice(22, frequency=100) # RIGHT Forward
+motor2E = PWMOutputDevice(17, frequency=100)
+
+GPIO.setup(GPIO_TRIGGER2,GPIO.OUT)  # Trigger 2
+GPIO.setup(GPIO_ECHO2,GPIO.IN)  # Echo 2
+GPIO.output(GPIO_TRIGGER2, False)
+
+def sonar(GPIO_TRIGGER,GPIO_ECHO):
+    start=0                    
+    stop=0
+    GPIO.setup(GPIO_TRIGGER,GPIO.OUT)  # Trigger
+    GPIO.setup(GPIO_ECHO,GPIO.IN)      # Echo
+     
+    GPIO.output(GPIO_TRIGGER, False)   # Set trigger to False (Low)
+     
+    time.sleep(0.01)                   # Allow module to settle
+
+    #while distance > 5, Send 10us pulse to trigger
+    GPIO.output(GPIO_TRIGGER, True)
+    time.sleep(0.00001)
+    GPIO.output(GPIO_TRIGGER, False)
+    begin = time.time()
+    while GPIO.input(GPIO_ECHO)==0 and time.time()<begin+0.05:
+        start = time.time()
+     
+    while GPIO.input(GPIO_ECHO)==1 and time.time()<begin+0.1:
+        stop = time.time()
+     
+    elapsed = stop-start # Calculate pulse length
+   
+    distance = elapsed * 34300 # Distance pulse traveled in that time is time multiplied by the speed of sound (cm/s)
+     
+   
+    distance = distance / 2 # That was the distance there and back, so take half of the value
+
+   
+    return distance # Reset GPIO settings, return distance (in cm) appropriate to be used for robot movement
+
+def stop():
+#     GPIO.output([MOTOR1B, MOTOR1E, MOTOR2B, MOTOR2E], GPIO.LOW)
+    motor1B.value = 0
+    motor1E.value = 0
+    motor2B.value = 0
+    motor2E.value = 0
+
+
+def left():
+    # Left motor backward/stop, Right motor forward
+    motor1B.value = 0
+    motor1E.value = SPEED
+    motor2B.value = SPEED
+    motor2E.value = 0
+
+def right():
+    # Left motor forward, Right motor backward/stop
+    motor1B.value = SPEED
+    motor1E.value = 0
+    motor2B.value = 0
+    motor2E.value = SPEED
+
+def forward():
+    motor1B.value = SPEED
+    motor1E.value = 0
+    motor2B.value = SPEED
+    motor2E.value = 0
+   
+
+# Camera setup
+picam2 = Picamera2()
+
+# Set dimensions for the preview
+picam2_config = picam2.create_preview_configuration(
+    main={"format": 'XRGB8888', "size": (320, 240)},
+    raw={"size": (320, 240)}
+   
+)
+
+picam2.configure(picam2_config)
+# picam2.video_configuration.controls.FrameRate = 25.0
+flag = 0 #SEARCHING: 0: left turn for last location of ball, 1: right turn for last location of ball
+flag_reroute = -1 #REROUTE SEARCHING  -1: No reroute, 0:reroute left , 1: reroute right
+
+picam2.start()
+time.sleep(2)
+ 
+
+# Define Red Color Range in HSV (moved outside loop for performance)
+lower_red1 = np.array([0, 100, 35])
+upper_red1 = np.array([10, 255, 255])
+lower_red2 = np.array([170, 100, 35])
+upper_red2 = np.array([180, 255, 255])
+
+# Structural element for morphology
+kernel = np.ones((5, 5), np.uint8)
+
+# Tracking Parameters
+FRAME_CENTER_X = 320   # 640 horizontal pixels / 2
+DEADZONE = 200          # Left/Right deviation allowed before steering (in pixels)
+MIN_AREA = 800         # Min object pixel size to prevent chasing random noise
+
+CIRCULARITY_THRESH = 0.35   # 1.0 = perfect circle
+FILL_RATIO_THRESH = 0.35
+def roundness_scores(contour):
+    """Return (circularity, fill_ratio) for a contour.
+    circularity: 4*pi*Area / Perimeter^2  -> 1.0 for a perfect circle
+    fill_ratio: Area / area_of_min_enclosing_circle -> 1.0 if blob fills that circle
+    """
+    area = cv2.contourArea(contour)
+    perimeter = cv2.arcLength(contour, True)
+ 
+    if perimeter == 0:
+        return 0.0, 0.0
+ 
+    circularity = 4 * np.pi * area / (perimeter ** 2)
+ 
+    (x, y), radius = cv2.minEnclosingCircle(contour)
+    circle_area = np.pi * (radius ** 2)
+    fill_ratio = area / circle_area if circle_area > 0 else 0.0
+ 
+    return circularity, fill_ratio
+ 
+ 
+def is_round(contour, circularity_thresh=CIRCULARITY_THRESH, fill_ratio_thresh=FILL_RATIO_THRESH):
+    circularity, fill_ratio = roundness_scores(contour)
+    return circularity > circularity_thresh and fill_ratio > fill_ratio_thresh
+
+try:
+    while True:
+        img = picam2.capture_array()
+       
+        # Convert
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)
+       
+        # Convert from BGR to HSV
+        hsv_frame = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2HSV)
+
+        # Create binary masks
+        mask1 = cv2.inRange(hsv_frame, lower_red1, upper_red1)
+        mask2 = cv2.inRange(hsv_frame, lower_red2, upper_red2)
+        full_red_mask = cv2.bitwise_or(mask1, mask2)
+
+        # Smooth out background specks and fill holes
+        full_red_mask = cv2.erode(full_red_mask, kernel, iterations=1)
+        full_red_mask = cv2.dilate(full_red_mask, kernel, iterations=1)
+       
+        contours, _ = cv2.findContours(full_red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        target_found = False
+
+        # Filter the original output
+        red_filtered_output = cv2.bitwise_and(img_rgb, img_rgb, mask=full_red_mask)
+       
+        if contours:
+            # Locate the largest red object in frame
+            sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
+ 
+            largest_contour = None
+            for c in sorted_contours:
+                if cv2.contourArea(c) > MIN_AREA and is_round(c):
+                    largest_contour = c
+                    break
+ 
+            if largest_contour is not None:
+                target_found = True
+                M = cv2.moments(largest_contour)
+               
+                if M["m00"] != 0:
+                    # Calculate centroid by dividing spatial sum over total area
+                    cX = int(M["m10"] / M["m00"])
+                    cY = int(M["m01"] / M["m00"])
+                   
+                    # Visual feedback indicators on our screen
+                    cv2.circle(img_rgb, (cX, cY), 7, (0, 255, 0), -1)
+#                     cv2.putText(img_rgb, "Red Target", (cX - 25, cY - 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                    # Debug: show roundness scores next to the target
+                    circ, fill = roundness_scores(largest_contour)
+                    cv2.putText(img_rgb, f"circ:{circ:.2f} fill:{fill:.2f}",
+                                (cX - 40, cY - 25), cv2.FONT_HERSHEY_SIMPLEX,
+                                0.4, (0, 255, 0), 1)
+                   
+                    # --- Target Tracking Decision Tree ---
+                    error_x = cX - FRAME_CENTER_X
+                   
+                    if error_x > DEADZONE:
+                        flag = 1 # Last seen on the right (if robot loses ball)
+                        print(f"Target right ({error_x}px). Turning Right.")
+                        right()
+                    elif error_x < -DEADZONE:
+                        flag = 0 # Last seen on the left (if robot loses ball)
+                        print(f"Target left ({error_x}px). Turning Left.")
+                        left()
+#                     else:
+#                         print("Target centered! Stopping.")
+#                         stop()
+                    else:
+                        # Ball is centered horizontally - check front ultrasonic
+                        # sensor before driving forward toward it.
+                        distance = sonar(GPIO_TRIGGER2, GPIO_ECHO2)
+                       
+                        if(error_x < 0):
+                            print("setting flag left")
+#                             print(error_x, FRAME_CENTER_X)
+                            flag = 0 #If ball is lost while to the left of the center, assign flag = 0
+                        elif(error_x >= 0):
+                            flag = 1 #If ball is lost while to the right of the center, assign flag = 1
+                            print("setting flag right")
+                        if distance > 7:
+                            print(f"Distance {distance:.1f}cm. Moving forward.")
+                            forward()
+                        else:
+                            print(f"Distance {distance:.1f}cm. Stopping.")
+                            stop()
+#                         forward()
+
+        if not target_found:
+            stop()
+#             print("No red target detected")
+            print("Finding ball, turning")
+            if flag == 0: # If last seen location was on the left, search by turning left
+                print("Searching left")
+                left()
+#                 time.sleep(0.04)
+#                 stop()
+            elif flag == 1: # If last seen location was on the right, search by turning right
+                right()
+                print("Searching right")
+#                 time.sleep(0.04)
+#                 stop()
+#                    
+        # Display windows
+        cv2.imshow("Original Output", img_rgb)
+#         cv2.imshow("Red Masked Output", red_filtered_output)
+#         cv2.imshow("Red Mask", full_red_mask)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+finally:
+    stop()
+    GPIO.cleanup()
+    picam2.stop()
+    picam2.close()
+    cv2.destroyAllWindows()
+    print("Application closed.")
 ```
 
 # Bill of Materials
