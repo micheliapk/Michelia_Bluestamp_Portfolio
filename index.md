@@ -72,7 +72,42 @@ My next steps will be to get and attach a new camera, and then use OpenCV to cod
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
 
 # Code
-Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
+Motor Testing Code:
+```c++
+import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+
+TRIG_PIN = 26
+ECHO_PIN = 16
+
+GPIO.setup(TRIG_PIN, GPIO.OUT)
+GPIO.setup(ECHO_PIN, GPIO.IN)
+GPIO.output(TRIG_PIN, GPIO.LOW)
+
+time.sleep(2)
+
+GPIO.output(TRIG_PIN, GPIO.HIGH)
+
+time.sleep(0.00001)
+
+GPIO.output(TRIG_PIN, GPIO.LOW)
+
+while GPIO.input(ECHO_PIN) ==0:
+    pulse_send=time.time()
+while GPIO.input(ECHO_PIN) ==1:
+    pulse_received=time.time()
+   
+pulse_duration=pulse_received - pulse_send
+pulse_duration=pulse_duration/2
+
+distance = 34300 * pulse_duration #speed of sound (cm/s) = 34300
+distance = round(distance,2)
+
+print ("object is at", distance, "cm from the ultrasonic sensor")
+
+GPIO.cleanup()
+```
 The finished program:
 ```c++
 import cv2
