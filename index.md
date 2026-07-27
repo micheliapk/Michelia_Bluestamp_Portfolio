@@ -72,7 +72,7 @@ My next steps will be to get and attach a new camera, and then use OpenCV to cod
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
 
 # Code
-Motor Testing Code:
+Ultrasonic Sensor Testing Code:
 ```c++
 import RPi.GPIO as GPIO
 import time
@@ -108,6 +108,61 @@ print ("object is at", distance, "cm from the ultrasonic sensor")
 
 GPIO.cleanup()
 ```
+
+Motor Testing Code:
+```c++
+import RPi.GPIO as GPIO
+import cv2
+import numpy as np
+
+GPIO.setmode(GPIO.BCM)
+
+MOTOR1B=24 # LEFT motor
+MOTOR1E=23
+
+MOTOR2B=22 # RIGHT motor
+MOTOR2E=17
+
+GPIO.setup(MOTOR1B, GPIO.OUT)
+GPIO.setup(MOTOR1E, GPIO.OUT)
+
+GPIO.setup(MOTOR2B, GPIO.OUT)
+GPIO.setup(MOTOR2E, GPIO.OUT)
+
+while(True):
+    userInput = input()
+   
+    if(userInput == 'w'):
+        GPIO.output(MOTOR1B,GPIO.HIGH)
+        GPIO.output(MOTOR1E,GPIO.LOW)
+        GPIO.output(MOTOR2B,GPIO.HIGH)
+        GPIO.output(MOTOR2E,GPIO.LOW)
+   
+    if(userInput == 'a'):
+        GPIO.output(MOTOR1B,GPIO.LOW)
+        GPIO.output(MOTOR1E,GPIO.LOW)
+        GPIO.output(MOTOR2B,GPIO.HIGH)
+        GPIO.output(MOTOR2E,GPIO.LOW)
+       
+    if(userInput == 's'):
+        GPIO.output(MOTOR1B,GPIO.LOW)
+        GPIO.output(MOTOR1E,GPIO.HIGH)
+        GPIO.output(MOTOR2B,GPIO.LOW)
+        GPIO.output(MOTOR2E,GPIO.HIGH)
+   
+    if(userInput == 'd'):
+        GPIO.output(MOTOR1B,GPIO.HIGH)
+        GPIO.output(MOTOR1E,GPIO.LOW)
+        GPIO.output(MOTOR2B,GPIO.LOW)
+        GPIO.output(MOTOR2E,GPIO.LOW)
+
+    if(userInput == 'x'):
+         GPIO.output(MOTOR1B,GPIO.LOW)
+         GPIO.output(MOTOR1E,GPIO.LOW)
+         GPIO.output(MOTOR2B,GPIO.LOW)
+         GPIO.output(MOTOR2E,GPIO.LOW)
+```
+
 The finished program:
 ```c++
 import cv2
