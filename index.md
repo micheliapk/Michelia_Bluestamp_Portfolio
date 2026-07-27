@@ -1,5 +1,6 @@
 # Ball Tracking Robot
 Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!
+My project
 
 You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
 ```HTML 
@@ -21,9 +22,9 @@ You should comment out all portions of your portfolio that you have not complete
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/deRCS-uypKo?si=u50UgMhjb24PZ0-c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>n>
 For my final milestone, I added code to make sure the detected object was also round, and code to search in the direction the ball last was when it moves out of frame. 
-My biggest challenges were ..............
+My biggest challenges were connecting my camera and getting my robot to recognize the ball. For my camera, I had to switch to a different port on my raspberry pi to connect it with, and for the recognition I had to experiment with different bounds for the red color in the code to account for the lights reflecting off of it.
 I learned a lot about how OpenCV works, such as about the bounds defining a color, and color masking. I also learned how ultrasonic sensors work, and how to convert that value into centimeters to make it easier to work with. Overall, throughout the project I learned a lot about debugging, especially with wiring, such as the multimeter to check where power may or may not be going through. 
-I'd hope to learn more about other sensors........
+I'd hope to learn more about other sensors, such as a gyro sensor for more accurate navigation and turning. 
 
 For your final milestone, explain the outcome of your project. Key details to include are:
 - What you've accomplished since your previous milestone
